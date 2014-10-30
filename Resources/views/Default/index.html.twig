@@ -1,0 +1,128 @@
+{% extends 'GanemosMadridPlenarioFormBundle::layout.html.twig' %}
+
+{% block body %}
+    <div class="span9 offset2">
+
+        <h1>PLENARIO 27 DE SEPTIEMBRE</h1>
+
+        <p>El formulario tiene como finalidad recoger la distribución territorial y sectorial de todas las personas en Ganemos Madrid.</p>
+
+
+        {{ form_start(form, {'attr': {'role': 'form', 'id': 'form0'}}) }}
+        {{ form_errors(form) }}
+
+        <div class="form-group">
+            {{ form_row(form.nombre, {'attr': {'class': 'form-control'}}) }}
+            {#{ form_label(form.nombre) }}
+            {{ form_errors(form.nombre) }}
+            {{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }#}
+        </div>
+
+        {#{ form_row(form.nombre, {'class': 'asdasd', 'attr': {'class': 'form-control'}}) }#}
+
+        <div class="form-group">
+            {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <fieldset>
+            <legend>Relación con el espacio</legend>
+            <div class="form-group">
+                {{ form_row(form.primeraVez, {'attr': {'class': 'checkbox'}, 'label': '¿Es la primera vez que vienes a un plenario, asamblea o grupo de trabajo de GanemosMadrid?'}) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.listaInformacion, {'attr': {'class': 'checkbox'}, 'label': '¿Quieres que te inscribamos en la lista de información de GanemosMadrid?'}) }}
+            </div>
+
+            <p>Si no formas parte de ningún grupo de trabajo y te apetece participar indícanos cuál para que te podamos enviar las próximas convocatorias.</p>
+            <div class="form-group xxxx">
+                <div class="form-group">
+                    {{ form_row(form.gruposTrabajo, {'attr': {'class': 'form-control'}, 'label': 'Elige los grupos'}) }}
+                </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Mapeo territorial</legend>
+            <p>Nos gustaría tener un mapa de la gente que participamos en GanemosMadrid.</p>
+            <div class="form-group">
+                {{ form_row(form.distrito, {'attr': {'class': 'form-control'}, 'label': 'En que distrito vives / participas:'}) }}
+                {#{ form_row(form.codigoPostal, {'attr': {'class': 'form-control'}, 'label': 'En que distrito vives / participas: indicar código postal'}) }#}
+            </div>
+
+            <p>En los próximos meses queremos organizar presentaciones de GanemosMadrid en los distintos barrios y distritos.</p>
+            <div class="form-group">
+                {{ form_row(form.presentacion, {'attr': {'class': 'checkbox'}, 'label': ' ¿Te apetece participar en la presentación de tu barrio o distrito?'}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_row(form.colectivosBarrio, {'attr': {'class': 'form-control'}, 'label': '¿Formas parte o tienes contacto directo con algún colectivo/organización de tu barrio que crees relevante invitar a estas presentaciones? Cuáles:'}) }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Mapeo sectorial</legend>
+            <p>Entendemos la elaboración del programa de Ganemos Madrid como un proceso participativo para el que aspiramos a contar con todo el conocimiento que tenemos las personas de la ciudad (diagnósticos y propuestas).</p>
+            <p>El primer paso para esto es realizar un mapeo sectorial de los grupos/organizaciones/personas que llevan años trabajando y  pensando sobre ello. Este mapeo servirá para realizar foros sectoriales de debate en función de 4 ejes.</p>
+
+            <div class="form-group">
+                {{ form_row(form.invitados, {'attr': {'class': 'form-control'}, 'label': 'Si formas parte o tienes contacto directo con algún colectivo/organización/persona que crees relevante invitar a estos foros, indícanos su nombre y a qué eje corresponden:'}) }}
+            </div>
+
+            <div class="form-group xxxx">
+                {{ form_row(form.sectorialEmpleo, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group xxxx">
+                {{ form_row(form.sectorialDerechos, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group xxxx">
+                {{ form_row(form.sectorialGobierno, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="form-group xxxx">
+                {{ form_row(form.sectorialCiudad, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </fieldset>
+
+        <div class="form-group">
+            {{ form_widget(form.save, {'attr': {'class': 'form-control'}, 'label': 'Enviar formulario', 'attr': {'class': 'btn btn-primary btn-large'}}) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+    <script>
+        $.validator.setDefaults({
+            highlight: function (element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) {
+                if (element.prop("type") === "checkbox" || element.prop("type") === "radio") {
+                    error.appendTo(element.parent().parent());
+                }
+                else if (element.parent(".input-group").length) {
+                    error.insertAfter(element.parent());
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+
+        $.validator.addMethod('regex', function (value, element, regex) {
+            return regex.test(value);
+        }, 'Código postal incorrecto');
+
+        $().ready(function () {
+            $("#form0").validate();
+            $("#ganemosmadrid_plenarioformbundle_participante_codigoPostal").rules("add", {
+                //minlength: 5,
+                //maxlength: 5,
+                regex: /^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/
+            });
+        });
+    </script>
+{% endblock %}
